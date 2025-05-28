@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure } from '../lib/orpc';
+import { jewerlyRouter } from './jewerly';
 
 export const appRouter = {
   healthCheck: publicProcedure.handler(() => {
@@ -10,5 +11,6 @@ export const appRouter = {
       user: context.session?.user,
     };
   }),
+  jewerly: jewerlyRouter,
 };
 export type AppRouter = typeof appRouter;
