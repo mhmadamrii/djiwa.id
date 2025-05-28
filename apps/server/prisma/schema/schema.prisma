@@ -1,0 +1,159 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated"
+  moduleFormat = "esm"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @map("_id")
+  name           String
+  email          String
+  emailVerified  Boolean
+  image          String?
+  createdAt      DateTime
+  updatedAt      DateTime
+  sessions       Session[]
+  accounts       Account[]
+  jewerly_assets JewerlyAsset[]
+  Review         Review[]
+  Notification   Notification[]
+  Wishlist       Wishlist[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @map("_id")
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @map("_id")
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
+
+model JewerlyAsset {
+  id           String         @id @default(uuid())
+  title        String
+  description  String
+  price        Int
+  image_url    String?
+  category_id  String
+  currency     String
+  categoryId   String?
+  userId       String?
+  Category     Category?      @relation(fields: [categoryId], references: [id])
+  User         User?          @relation(fields: [userId], references: [id])
+  Review       Review[]
+  created_at   DateTime       @default(now())
+  updated_at   DateTime       @updatedAt
+  Notification Notification[]
+  Wishlist     Wishlist[]
+
+  @@map("jewerly_asset")
+}
+
+model Category {
+  id             String         @id @default(uuid())
+  name           String
+  description    String
+  jewerly_assets JewerlyAsset[]
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+
+  @@map("category")
+}
+
+model Review {
+  id             String       @id @default(cuid())
+  rating         Int
+  comment        String
+  userId         String
+  jewerlyAssetId String
+  User           User         @relation(fields: [userId], references: [id])
+  JewerlyAsset   JewerlyAsset @relation(fields: [jewerlyAssetId], references: [id])
+  created_at     DateTime     @default(now())
+  updated_at     DateTime     @updatedAt
+
+  @@map("review")
+}
+
+model Notification {
+  id             String        @id @default(cuid())
+  title          String
+  message        String
+  userId         String
+  type           NotifType
+  jewerlyAssetId String?
+  User           User          @relation(fields: [userId], references: [id])
+  JewerlyAsset   JewerlyAsset? @relation(fields: [jewerlyAssetId], references: [id])
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+
+  @@map("notification")
+}
+
+model Wishlist {
+  id             String @id @default(cuid())
+  userId         String
+  jewerlyAssetId String
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jewerlyAsset JewerlyAsset @relation(fields: [jewerlyAssetId], references: [id], onDelete: Cascade)
+
+  created_at DateTime @default(now())
+
+  @@unique([userId, jewerlyAssetId])
+  @@map("wishlist")
+}
+
+enum NotifType {
+  JEWERLY_SOLD
+  JEWERLY_PURCHASED
+  JEWERLY_REVIEW
+  JEWERLY_COMMENT
+  JEWERLY_LIKE
+  JEWERLY_DISLIKE
+  JEWERLY_DELETE
+}
