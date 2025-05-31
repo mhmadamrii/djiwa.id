@@ -8,6 +8,7 @@
     "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/src/index.js",
+    "postinstall": "prisma generate --schema ./prisma/schema",
     "db:push": "prisma db push --schema ./prisma/schema",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate --schema ./prisma/schema",
