@@ -8,6 +8,7 @@ export const Route = createFileRoute('/login')({
 });
 
 function RouteComponent() {
+  console.log('auth here');
   const [showSignIn, setShowSignIn] = useState(false);
 
   return showSignIn ? (
