@@ -1,11 +1,11 @@
+import { Card } from '@/components/ui/card';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { LoginForm } from './-components/login-form';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { RegisterForm } from './-components/register-form';
+import { Button } from '@/components/ui/button';
 
-export const Route = createFileRoute('/auth/')({
+export const Route = createFileRoute('/_authLayout/auth')({
   component: RouteComponent,
 });
 

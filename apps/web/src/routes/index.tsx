@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useORPC } from '@/utils/orpc';
 import { ModeToggle } from '@/components/mode-toggle';
@@ -21,7 +21,6 @@ function HomeComponent() {
             <div
               className={`h-2 w-2 rounded-full ${healthCheck.data ? 'bg-green-500' : 'bg-red-500'}`}
             />
-            <Link to='/publishing'>Publishing</Link>
             <span className='text-muted-foreground text-sm'>
               {healthCheck.isLoading
                 ? 'Checking...'

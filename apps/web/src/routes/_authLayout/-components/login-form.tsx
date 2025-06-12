@@ -15,24 +15,39 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { authClient } from '@/lib/auth-client';
+import { useNavigate } from '@tanstack/react-router';
 
 const formSchema = z.object({
   email: z.string(),
   password: z.string(),
 });
 
-export function RegisterForm() {
+export function LoginForm() {
+  const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      console.log(values);
-      toast(
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
-        </pre>,
+      await authClient.signIn.email(
+        {
+          email: values.email,
+          password: values.password,
+        },
+        {
+          onSuccess: () => {
+            navigate({
+              to: '/dashboard',
+            });
+            toast.success('Sign in successful');
+          },
+          onError: (error) => {
+            toast.error(error.error.message);
+          },
+        },
       );
     } catch (error) {
       console.error('Form submission error', error);
@@ -42,7 +57,7 @@ export function RegisterForm() {
 
   return (
     <section className='flex flex-col gap-2'>
-      <h1>Register</h1>
+      <h1>Login</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}

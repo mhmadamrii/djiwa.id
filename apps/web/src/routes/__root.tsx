@@ -61,13 +61,7 @@ function RootDocument() {
       </head>
       <body>
         <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-          <main className='flex min-h-screen'>
-            <Sidebar location={location.pathname} />
-            <section className={cn('border flex-grow')}>
-              <Header location={location.pathname} />
-              <Outlet />
-            </section>
-          </main>
+          <Outlet />
         </ThemeProvider>
         <Toaster richColors />
         <TanStackRouterDevtools position='bottom-left' />

@@ -14,12 +14,10 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardUserImport } from './routes/dashboard-user'
 import { Route as IndexImport } from './routes/index'
-import { Route as SomethingIndexImport } from './routes/something/index'
-import { Route as PublishingIndexImport } from './routes/publishing/index'
-import { Route as JewerlyIndexImport } from './routes/jewerly/index'
-import { Route as DashboardIndexImport } from './routes/dashboard/index'
-import { Route as AuthIndexImport } from './routes/auth/index'
-import { Route as AuthForgetPasswordImport } from './routes/auth/forget-password'
+import { Route as MainLayoutMainImport } from './routes/_mainLayout/_main'
+import { Route as AuthLayoutAuthImport } from './routes/_authLayout/auth'
+import { Route as MainLayoutMainPublishingImport } from './routes/_mainLayout/_main.publishing'
+import { Route as MainLayoutMainDashboardImport } from './routes/_mainLayout/_main.dashboard'
 
 // Create/Update Routes
 
@@ -41,40 +39,27 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const SomethingIndexRoute = SomethingIndexImport.update({
-  id: '/something/',
-  path: '/something/',
+const MainLayoutMainRoute = MainLayoutMainImport.update({
+  id: '/_mainLayout/_main',
   getParentRoute: () => rootRoute,
 } as any)
 
-const PublishingIndexRoute = PublishingIndexImport.update({
-  id: '/publishing/',
-  path: '/publishing/',
+const AuthLayoutAuthRoute = AuthLayoutAuthImport.update({
+  id: '/_authLayout/auth',
+  path: '/auth',
   getParentRoute: () => rootRoute,
 } as any)
 
-const JewerlyIndexRoute = JewerlyIndexImport.update({
-  id: '/jewerly/',
-  path: '/jewerly/',
-  getParentRoute: () => rootRoute,
+const MainLayoutMainPublishingRoute = MainLayoutMainPublishingImport.update({
+  id: '/publishing',
+  path: '/publishing',
+  getParentRoute: () => MainLayoutMainRoute,
 } as any)
 
-const DashboardIndexRoute = DashboardIndexImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AuthIndexRoute = AuthIndexImport.update({
-  id: '/auth/',
-  path: '/auth/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const AuthForgetPasswordRoute = AuthForgetPasswordImport.update({
-  id: '/auth/forget-password',
-  path: '/auth/forget-password',
-  getParentRoute: () => rootRoute,
+const MainLayoutMainDashboardRoute = MainLayoutMainDashboardImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => MainLayoutMainRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -102,75 +87,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/auth/forget-password': {
-      id: '/auth/forget-password'
-      path: '/auth/forget-password'
-      fullPath: '/auth/forget-password'
-      preLoaderRoute: typeof AuthForgetPasswordImport
-      parentRoute: typeof rootRoute
-    }
-    '/auth/': {
-      id: '/auth/'
+    '/_authLayout/auth': {
+      id: '/_authLayout/auth'
       path: '/auth'
       fullPath: '/auth'
-      preLoaderRoute: typeof AuthIndexImport
+      preLoaderRoute: typeof AuthLayoutAuthImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard/': {
-      id: '/dashboard/'
+    '/_mainLayout/_main': {
+      id: '/_mainLayout/_main'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof MainLayoutMainImport
+      parentRoute: typeof rootRoute
+    }
+    '/_mainLayout/_main/dashboard': {
+      id: '/_mainLayout/_main/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MainLayoutMainDashboardImport
+      parentRoute: typeof MainLayoutMainImport
     }
-    '/jewerly/': {
-      id: '/jewerly/'
-      path: '/jewerly'
-      fullPath: '/jewerly'
-      preLoaderRoute: typeof JewerlyIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/publishing/': {
-      id: '/publishing/'
+    '/_mainLayout/_main/publishing': {
+      id: '/_mainLayout/_main/publishing'
       path: '/publishing'
       fullPath: '/publishing'
-      preLoaderRoute: typeof PublishingIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/something/': {
-      id: '/something/'
-      path: '/something'
-      fullPath: '/something'
-      preLoaderRoute: typeof SomethingIndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof MainLayoutMainPublishingImport
+      parentRoute: typeof MainLayoutMainImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface MainLayoutMainRouteChildren {
+  MainLayoutMainDashboardRoute: typeof MainLayoutMainDashboardRoute
+  MainLayoutMainPublishingRoute: typeof MainLayoutMainPublishingRoute
+}
+
+const MainLayoutMainRouteChildren: MainLayoutMainRouteChildren = {
+  MainLayoutMainDashboardRoute: MainLayoutMainDashboardRoute,
+  MainLayoutMainPublishingRoute: MainLayoutMainPublishingRoute,
+}
+
+const MainLayoutMainRouteWithChildren = MainLayoutMainRoute._addFileChildren(
+  MainLayoutMainRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
-  '/auth/forget-password': typeof AuthForgetPasswordRoute
-  '/auth': typeof AuthIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/jewerly': typeof JewerlyIndexRoute
-  '/publishing': typeof PublishingIndexRoute
-  '/something': typeof SomethingIndexRoute
+  '/auth': typeof AuthLayoutAuthRoute
+  '': typeof MainLayoutMainRouteWithChildren
+  '/dashboard': typeof MainLayoutMainDashboardRoute
+  '/publishing': typeof MainLayoutMainPublishingRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
-  '/auth/forget-password': typeof AuthForgetPasswordRoute
-  '/auth': typeof AuthIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/jewerly': typeof JewerlyIndexRoute
-  '/publishing': typeof PublishingIndexRoute
-  '/something': typeof SomethingIndexRoute
+  '/auth': typeof AuthLayoutAuthRoute
+  '': typeof MainLayoutMainRouteWithChildren
+  '/dashboard': typeof MainLayoutMainDashboardRoute
+  '/publishing': typeof MainLayoutMainPublishingRoute
 }
 
 export interface FileRoutesById {
@@ -178,12 +159,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
-  '/auth/forget-password': typeof AuthForgetPasswordRoute
-  '/auth/': typeof AuthIndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/jewerly/': typeof JewerlyIndexRoute
-  '/publishing/': typeof PublishingIndexRoute
-  '/something/': typeof SomethingIndexRoute
+  '/_authLayout/auth': typeof AuthLayoutAuthRoute
+  '/_mainLayout/_main': typeof MainLayoutMainRouteWithChildren
+  '/_mainLayout/_main/dashboard': typeof MainLayoutMainDashboardRoute
+  '/_mainLayout/_main/publishing': typeof MainLayoutMainPublishingRoute
 }
 
 export interface FileRouteTypes {
@@ -192,34 +171,28 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
-    | '/auth/forget-password'
     | '/auth'
+    | ''
     | '/dashboard'
-    | '/jewerly'
     | '/publishing'
-    | '/something'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/dashboard-user'
     | '/login'
-    | '/auth/forget-password'
     | '/auth'
+    | ''
     | '/dashboard'
-    | '/jewerly'
     | '/publishing'
-    | '/something'
   id:
     | '__root__'
     | '/'
     | '/dashboard-user'
     | '/login'
-    | '/auth/forget-password'
-    | '/auth/'
-    | '/dashboard/'
-    | '/jewerly/'
-    | '/publishing/'
-    | '/something/'
+    | '/_authLayout/auth'
+    | '/_mainLayout/_main'
+    | '/_mainLayout/_main/dashboard'
+    | '/_mainLayout/_main/publishing'
   fileRoutesById: FileRoutesById
 }
 
@@ -227,24 +200,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardUserRoute: typeof DashboardUserRoute
   LoginRoute: typeof LoginRoute
-  AuthForgetPasswordRoute: typeof AuthForgetPasswordRoute
-  AuthIndexRoute: typeof AuthIndexRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  JewerlyIndexRoute: typeof JewerlyIndexRoute
-  PublishingIndexRoute: typeof PublishingIndexRoute
-  SomethingIndexRoute: typeof SomethingIndexRoute
+  AuthLayoutAuthRoute: typeof AuthLayoutAuthRoute
+  MainLayoutMainRoute: typeof MainLayoutMainRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardUserRoute: DashboardUserRoute,
   LoginRoute: LoginRoute,
-  AuthForgetPasswordRoute: AuthForgetPasswordRoute,
-  AuthIndexRoute: AuthIndexRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  JewerlyIndexRoute: JewerlyIndexRoute,
-  PublishingIndexRoute: PublishingIndexRoute,
-  SomethingIndexRoute: SomethingIndexRoute,
+  AuthLayoutAuthRoute: AuthLayoutAuthRoute,
+  MainLayoutMainRoute: MainLayoutMainRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -260,12 +225,8 @@ export const routeTree = rootRoute
         "/",
         "/dashboard-user",
         "/login",
-        "/auth/forget-password",
-        "/auth/",
-        "/dashboard/",
-        "/jewerly/",
-        "/publishing/",
-        "/something/"
+        "/_authLayout/auth",
+        "/_mainLayout/_main"
       ]
     },
     "/": {
@@ -277,23 +238,23 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
-    "/auth/forget-password": {
-      "filePath": "auth/forget-password.tsx"
+    "/_authLayout/auth": {
+      "filePath": "_authLayout/auth.tsx"
     },
-    "/auth/": {
-      "filePath": "auth/index.tsx"
+    "/_mainLayout/_main": {
+      "filePath": "_mainLayout/_main.tsx",
+      "children": [
+        "/_mainLayout/_main/dashboard",
+        "/_mainLayout/_main/publishing"
+      ]
     },
-    "/dashboard/": {
-      "filePath": "dashboard/index.tsx"
+    "/_mainLayout/_main/dashboard": {
+      "filePath": "_mainLayout/_main.dashboard.tsx",
+      "parent": "/_mainLayout/_main"
     },
-    "/jewerly/": {
-      "filePath": "jewerly/index.tsx"
-    },
-    "/publishing/": {
-      "filePath": "publishing/index.tsx"
-    },
-    "/something/": {
-      "filePath": "something/index.tsx"
+    "/_mainLayout/_main/publishing": {
+      "filePath": "_mainLayout/_main.publishing.tsx",
+      "parent": "/_mainLayout/_main"
     }
   }
 }
