@@ -12,11 +12,13 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as DashboardImport } from './routes/dashboard'
+import { Route as DashboardUserImport } from './routes/dashboard-user'
 import { Route as IndexImport } from './routes/index'
 import { Route as SomethingIndexImport } from './routes/something/index'
 import { Route as PublishingIndexImport } from './routes/publishing/index'
 import { Route as JewerlyIndexImport } from './routes/jewerly/index'
+import { Route as DashboardIndexImport } from './routes/dashboard/index'
+import { Route as AuthIndexImport } from './routes/auth/index'
 
 // Create/Update Routes
 
@@ -26,9 +28,9 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
+const DashboardUserRoute = DashboardUserImport.update({
+  id: '/dashboard-user',
+  path: '/dashboard-user',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -56,6 +58,18 @@ const JewerlyIndexRoute = JewerlyIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const DashboardIndexRoute = DashboardIndexImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthIndexRoute = AuthIndexImport.update({
+  id: '/auth/',
+  path: '/auth/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -67,11 +81,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
+    '/dashboard-user': {
+      id: '/dashboard-user'
+      path: '/dashboard-user'
+      fullPath: '/dashboard-user'
+      preLoaderRoute: typeof DashboardUserImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -79,6 +93,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/': {
+      id: '/auth/'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardIndexImport
       parentRoute: typeof rootRoute
     }
     '/jewerly/': {
@@ -109,8 +137,10 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/auth': typeof AuthIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/jewerly': typeof JewerlyIndexRoute
   '/publishing': typeof PublishingIndexRoute
   '/something': typeof SomethingIndexRoute
@@ -118,8 +148,10 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/auth': typeof AuthIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/jewerly': typeof JewerlyIndexRoute
   '/publishing': typeof PublishingIndexRoute
   '/something': typeof SomethingIndexRoute
@@ -128,8 +160,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
+  '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/auth/': typeof AuthIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/jewerly/': typeof JewerlyIndexRoute
   '/publishing/': typeof PublishingIndexRoute
   '/something/': typeof SomethingIndexRoute
@@ -139,18 +173,30 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dashboard'
+    | '/dashboard-user'
     | '/login'
+    | '/auth'
+    | '/dashboard'
     | '/jewerly'
     | '/publishing'
     | '/something'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/jewerly' | '/publishing' | '/something'
+  to:
+    | '/'
+    | '/dashboard-user'
+    | '/login'
+    | '/auth'
+    | '/dashboard'
+    | '/jewerly'
+    | '/publishing'
+    | '/something'
   id:
     | '__root__'
     | '/'
-    | '/dashboard'
+    | '/dashboard-user'
     | '/login'
+    | '/auth/'
+    | '/dashboard/'
     | '/jewerly/'
     | '/publishing/'
     | '/something/'
@@ -159,8 +205,10 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
+  DashboardUserRoute: typeof DashboardUserRoute
   LoginRoute: typeof LoginRoute
+  AuthIndexRoute: typeof AuthIndexRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
   JewerlyIndexRoute: typeof JewerlyIndexRoute
   PublishingIndexRoute: typeof PublishingIndexRoute
   SomethingIndexRoute: typeof SomethingIndexRoute
@@ -168,8 +216,10 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
+  DashboardUserRoute: DashboardUserRoute,
   LoginRoute: LoginRoute,
+  AuthIndexRoute: AuthIndexRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
   JewerlyIndexRoute: JewerlyIndexRoute,
   PublishingIndexRoute: PublishingIndexRoute,
   SomethingIndexRoute: SomethingIndexRoute,
@@ -186,8 +236,10 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
+        "/dashboard-user",
         "/login",
+        "/auth/",
+        "/dashboard/",
         "/jewerly/",
         "/publishing/",
         "/something/"
@@ -196,11 +248,17 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
-    "/dashboard": {
-      "filePath": "dashboard.tsx"
+    "/dashboard-user": {
+      "filePath": "dashboard-user.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/auth/": {
+      "filePath": "auth/index.tsx"
+    },
+    "/dashboard/": {
+      "filePath": "dashboard/index.tsx"
     },
     "/jewerly/": {
       "filePath": "jewerly/index.tsx"

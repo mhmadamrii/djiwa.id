@@ -18,6 +18,7 @@ import {
   createRootRouteWithContext,
   useRouterState,
 } from '@tanstack/react-router';
+import { NAV_LINKS } from '@/constants';
 
 export interface RouterAppContext {
   orpc: typeof orpc;
@@ -58,22 +59,23 @@ function RootDocument() {
         <HeadContent />
       </head>
       <body>
-        <div className='grid h-svh grid-rows-[auto_1fr]'>
-          <Header />
-          <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-            {isFetching ? (
-              <Loader />
-            ) : (
-              <main className='flex gap-4'>
-                <aside className='border min-w-[300px] flex flex-col gap-2.5 max-w-[400px] p-4 sticky top-0 z-10'>
-                  <Link to='/jewerly'>Jewerly</Link>
-                  <Link to='/something'>Something</Link>
-                </aside>
-                <Outlet />
-              </main>
-            )}
-          </ThemeProvider>
-        </div>
+        <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+          <main className='flex min-h-screen'>
+            <aside className='border min-w-[300px] flex flex-col border-red-500 gap-2.5 max-w-[400px] p-4 sticky top-0 z-30'>
+              {NAV_LINKS.map(({ to, label }) => {
+                return (
+                  <Link key={to} to={to}>
+                    {label}
+                  </Link>
+                );
+              })}
+            </aside>
+            <section className='border flex-grow'>
+              <Header />
+              <Outlet />
+            </section>
+          </main>
+        </ThemeProvider>
         <Toaster richColors />
         <TanStackRouterDevtools position='bottom-left' />
         <ReactQueryDevtools position='bottom' buttonPosition='bottom-right' />
