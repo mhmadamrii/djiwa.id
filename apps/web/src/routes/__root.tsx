@@ -1,11 +1,11 @@
 import Header from '../components/header';
-import Loader from '@/components/loader';
 import appCss from '../index.css?url';
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { NAV_LINKS } from '@/constants';
 import { Toaster } from '@/components/ui/sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Sidebar } from '@/components/sidebar';
+import { cn } from '@/lib/utils';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 import type { QueryClient } from '@tanstack/react-query';
@@ -13,13 +13,12 @@ import type { orpc } from '@/utils/orpc';
 
 import {
   HeadContent,
-  Link,
   Outlet,
   Scripts,
   createRootRouteWithContext,
+  useLocation,
   useRouterState,
 } from '@tanstack/react-router';
-import { Sidebar } from '@/components/sidebar';
 
 export interface RouterAppContext {
   orpc: typeof orpc;
@@ -53,6 +52,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument() {
   const isFetching = useRouterState({ select: (s) => s.isLoading });
+  const location = useLocation();
 
   return (
     <html lang='en' className='dark'>
@@ -62,9 +62,9 @@ function RootDocument() {
       <body>
         <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
           <main className='flex min-h-screen'>
-            <Sidebar />
-            <section className='border flex-grow'>
-              <Header />
+            <Sidebar location={location.pathname} />
+            <section className={cn('border flex-grow')}>
+              <Header location={location.pathname} />
               <Outlet />
             </section>
           </main>

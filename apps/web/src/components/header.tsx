@@ -1,6 +1,7 @@
 import UserMenu from './user-menu';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { cn } from '@/lib/utils';
 import { ModeToggle } from './mode-toggle';
 import { Input } from './ui/input';
 import { useState, useEffect } from 'react';
@@ -25,7 +26,7 @@ import {
   User,
 } from 'lucide-react';
 
-export default function Header() {
+export default function Header({ location }: { location: string }) {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -39,7 +40,11 @@ export default function Header() {
   }, []);
 
   return (
-    <div>
+    <div
+      className={cn('', {
+        hidden: location === '/auth',
+      })}
+    >
       <div className='flex flex-row items-center justify-between px-2 py-1'>
         <div>
           <Input />

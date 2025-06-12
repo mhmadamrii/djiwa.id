@@ -19,7 +19,7 @@ import { Route as PublishingIndexImport } from './routes/publishing/index'
 import { Route as JewerlyIndexImport } from './routes/jewerly/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
-import { Route as AuthForgetPasswordImport }./routes/auth/forget-passwordforget-password'
+import { Route as AuthForgetPasswordImport } from './routes/auth/forget-password'
 
 // Create/Update Routes
 

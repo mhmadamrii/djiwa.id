@@ -1,9 +1,17 @@
 import { NAV_LINKS } from '@/constants';
+import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 
-export function Sidebar() {
+export function Sidebar({ location }: { location: string }) {
   return (
-    <aside className='border min-w-[300px] flex flex-col gap-2.5 max-w-[400px] p-4 sticky top-0 z-30'>
+    <aside
+      className={cn(
+        'border min-w-[300px] flex flex-col gap-2.5 max-w-[400px] p-4 sticky top-0 z-30',
+        {
+          hidden: location === '/auth',
+        },
+      )}
+    >
       <Link className='w-full' to='/'>
         <img src='/djiwaID.svg' alt='djiwaID' className='w-[120px] h-[100px]' />
       </Link>
