@@ -19,6 +19,7 @@ import { Route as PublishingIndexImport } from './routes/publishing/index'
 import { Route as JewerlyIndexImport } from './routes/jewerly/index'
 import { Route as DashboardIndexImport } from './routes/dashboard/index'
 import { Route as AuthIndexImport } from './routes/auth/index'
+import { Route as AuthForgetPasswordImport }./routes/auth/forget-passwordforget-password'
 
 // Create/Update Routes
 
@@ -70,6 +71,12 @@ const AuthIndexRoute = AuthIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthForgetPasswordRoute = AuthForgetPasswordImport.update({
+  id: '/auth/forget-password',
+  path: '/auth/forget-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -93,6 +100,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/forget-password': {
+      id: '/auth/forget-password'
+      path: '/auth/forget-password'
+      fullPath: '/auth/forget-password'
+      preLoaderRoute: typeof AuthForgetPasswordImport
       parentRoute: typeof rootRoute
     }
     '/auth/': {
@@ -139,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/auth/forget-password': typeof AuthForgetPasswordRoute
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/jewerly': typeof JewerlyIndexRoute
@@ -150,6 +165,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/auth/forget-password': typeof AuthForgetPasswordRoute
   '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/jewerly': typeof JewerlyIndexRoute
@@ -162,6 +178,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/auth/forget-password': typeof AuthForgetPasswordRoute
   '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/jewerly/': typeof JewerlyIndexRoute
@@ -175,6 +192,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
+    | '/auth/forget-password'
     | '/auth'
     | '/dashboard'
     | '/jewerly'
@@ -185,6 +203,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
+    | '/auth/forget-password'
     | '/auth'
     | '/dashboard'
     | '/jewerly'
@@ -195,6 +214,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
+    | '/auth/forget-password'
     | '/auth/'
     | '/dashboard/'
     | '/jewerly/'
@@ -207,6 +227,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardUserRoute: typeof DashboardUserRoute
   LoginRoute: typeof LoginRoute
+  AuthForgetPasswordRoute: typeof AuthForgetPasswordRoute
   AuthIndexRoute: typeof AuthIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   JewerlyIndexRoute: typeof JewerlyIndexRoute
@@ -218,6 +239,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardUserRoute: DashboardUserRoute,
   LoginRoute: LoginRoute,
+  AuthForgetPasswordRoute: AuthForgetPasswordRoute,
   AuthIndexRoute: AuthIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   JewerlyIndexRoute: JewerlyIndexRoute,
@@ -238,6 +260,7 @@ export const routeTree = rootRoute
         "/",
         "/dashboard-user",
         "/login",
+        "/auth/forget-password",
         "/auth/",
         "/dashboard/",
         "/jewerly/",
@@ -253,6 +276,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/auth/forget-password": {
+      "filePath": "auth/forget-password.tsx"
     },
     "/auth/": {
       "filePath": "auth/index.tsx"

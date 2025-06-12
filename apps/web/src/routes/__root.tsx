@@ -3,6 +3,7 @@ import Loader from '@/components/loader';
 import appCss from '../index.css?url';
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { NAV_LINKS } from '@/constants';
 import { Toaster } from '@/components/ui/sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
@@ -18,7 +19,7 @@ import {
   createRootRouteWithContext,
   useRouterState,
 } from '@tanstack/react-router';
-import { NAV_LINKS } from '@/constants';
+import { Sidebar } from '@/components/sidebar';
 
 export interface RouterAppContext {
   orpc: typeof orpc;
@@ -61,15 +62,7 @@ function RootDocument() {
       <body>
         <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
           <main className='flex min-h-screen'>
-            <aside className='border min-w-[300px] flex flex-col border-red-500 gap-2.5 max-w-[400px] p-4 sticky top-0 z-30'>
-              {NAV_LINKS.map(({ to, label }) => {
-                return (
-                  <Link key={to} to={to}>
-                    {label}
-                  </Link>
-                );
-              })}
-            </aside>
+            <Sidebar />
             <section className='border flex-grow'>
               <Header />
               <Outlet />
