@@ -1,6 +1,8 @@
 'use client';
 
 import * as z from 'zod';
+
+import { useState } from 'react';
 import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -24,12 +26,18 @@ const formSchema = z.object({
 });
 
 export function RegisterForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsLoading(true);
     try {
       await authClient.signUp.email(
         {
@@ -38,13 +46,15 @@ export function RegisterForm() {
           name: 'something',
         },
         {
-          onSuccess: () => {
-            navigate({
-              to: '/dashboard',
-            });
-            toast.success('Sign up successful');
+          onSuccess: (res) => {
+            console.log('res', res);
+            // navigate({
+            //   to: '/dashboard',
+            // });
+            // toast.success('Sign up successful');
           },
           onError: (error) => {
+            console.log('error', error);
             toast.error(error.error.message);
           },
         },
@@ -52,6 +62,8 @@ export function RegisterForm() {
     } catch (error) {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -96,8 +108,9 @@ export function RegisterForm() {
           <Button
             className='w-full bg-[#FF3B30] cursor-pointer hover:bg-[#FF3B30]/80'
             type='submit'
+            disabled={isLoading}
           >
-            Submit
+            {isLoading ? 'Loading' : 'Submit'}
           </Button>
         </form>
       </Form>

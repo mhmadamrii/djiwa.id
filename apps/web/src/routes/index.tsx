@@ -1,15 +1,27 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { useORPC } from '@/utils/orpc';
 import { ModeToggle } from '@/components/mode-toggle';
+import { authClient } from '@/lib/auth-client';
 
 export const Route = createFileRoute('/')({
   component: HomeComponent,
 });
 
 function HomeComponent() {
+  const navigate = useNavigate();
   const orpc = useORPC();
   const healthCheck = useQuery(orpc.healthCheck.queryOptions());
+  const { data: session, isPending } = authClient.useSession();
+  if (session && !isPending) {
+    navigate({
+      to: '/dashboard',
+    });
+  } else {
+    navigate({
+      to: '/auth',
+    });
+  }
 
   return (
     <div className='container mx-auto max-w-3xl px-4 py-2'>

@@ -1,4 +1,5 @@
 import { protectedProcedure, publicProcedure } from '../lib/orpc';
+import { sendVerificationEmail } from './email';
 import { jewerlyRouter } from './jewerly';
 
 export const appRouter = {
@@ -12,5 +13,6 @@ export const appRouter = {
     };
   }),
   jewerly: jewerlyRouter,
+  email: sendVerificationEmail,
 };
 export type AppRouter = typeof appRouter;

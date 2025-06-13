@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestingImport } from './routes/testing'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardUserImport } from './routes/dashboard-user'
 import { Route as IndexImport } from './routes/index'
@@ -20,6 +21,12 @@ import { Route as MainLayoutMainPublishingImport } from './routes/_mainLayout/_m
 import { Route as MainLayoutMainDashboardImport } from './routes/_mainLayout/_main.dashboard'
 
 // Create/Update Routes
+
+const TestingRoute = TestingImport.update({
+  id: '/testing',
+  path: '/testing',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -87,6 +94,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/testing': {
+      id: '/testing'
+      path: '/testing'
+      fullPath: '/testing'
+      preLoaderRoute: typeof TestingImport
+      parentRoute: typeof rootRoute
+    }
     '/_authLayout/auth': {
       id: '/_authLayout/auth'
       path: '/auth'
@@ -138,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/testing': typeof TestingRoute
   '/auth': typeof AuthLayoutAuthRoute
   '': typeof MainLayoutMainRouteWithChildren
   '/dashboard': typeof MainLayoutMainDashboardRoute
@@ -148,6 +163,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/testing': typeof TestingRoute
   '/auth': typeof AuthLayoutAuthRoute
   '': typeof MainLayoutMainRouteWithChildren
   '/dashboard': typeof MainLayoutMainDashboardRoute
@@ -159,6 +175,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dashboard-user': typeof DashboardUserRoute
   '/login': typeof LoginRoute
+  '/testing': typeof TestingRoute
   '/_authLayout/auth': typeof AuthLayoutAuthRoute
   '/_mainLayout/_main': typeof MainLayoutMainRouteWithChildren
   '/_mainLayout/_main/dashboard': typeof MainLayoutMainDashboardRoute
@@ -171,6 +188,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
+    | '/testing'
     | '/auth'
     | ''
     | '/dashboard'
@@ -180,6 +198,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
+    | '/testing'
     | '/auth'
     | ''
     | '/dashboard'
@@ -189,6 +208,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard-user'
     | '/login'
+    | '/testing'
     | '/_authLayout/auth'
     | '/_mainLayout/_main'
     | '/_mainLayout/_main/dashboard'
@@ -200,6 +220,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardUserRoute: typeof DashboardUserRoute
   LoginRoute: typeof LoginRoute
+  TestingRoute: typeof TestingRoute
   AuthLayoutAuthRoute: typeof AuthLayoutAuthRoute
   MainLayoutMainRoute: typeof MainLayoutMainRouteWithChildren
 }
@@ -208,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardUserRoute: DashboardUserRoute,
   LoginRoute: LoginRoute,
+  TestingRoute: TestingRoute,
   AuthLayoutAuthRoute: AuthLayoutAuthRoute,
   MainLayoutMainRoute: MainLayoutMainRouteWithChildren,
 }
@@ -225,6 +247,7 @@ export const routeTree = rootRoute
         "/",
         "/dashboard-user",
         "/login",
+        "/testing",
         "/_authLayout/auth",
         "/_mainLayout/_main"
       ]
@@ -237,6 +260,9 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/testing": {
+      "filePath": "testing.tsx"
     },
     "/_authLayout/auth": {
       "filePath": "_authLayout/auth.tsx"

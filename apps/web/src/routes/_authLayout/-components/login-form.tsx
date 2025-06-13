@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
+import { authClient } from '@/lib/auth-client';
+import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/ui/password-input';
 import {
@@ -15,8 +17,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { authClient } from '@/lib/auth-client';
-import { useNavigate } from '@tanstack/react-router';
 
 const formSchema = z.object({
   email: z.string(),
@@ -28,6 +28,10 @@ export function LoginForm() {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
