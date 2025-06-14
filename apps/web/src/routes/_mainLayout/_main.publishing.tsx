@@ -1,10 +1,66 @@
+import { useState } from 'react';
 import { JewerlyForm } from '@/components/forms/jewerly-form';
 import { createFileRoute } from '@tanstack/react-router';
+import { AnimatedStepper } from '@/components/ui/stepper';
+import { Card } from '@/components/ui/card';
+import { JewerlyUploadForm } from '@/components/forms/jewerly-upload-form';
+import { JewerlyPublishForm } from '@/components/forms/jewerly-publish-form';
 
 export const Route = createFileRoute('/_mainLayout/_main/publishing')({
   component: RouteComponent,
 });
 
+const steps = [
+  {
+    number: 1,
+    label: 'Asset',
+  },
+  {
+    number: 2,
+    label: 'Upload',
+  },
+  {
+    number: 3,
+    label: 'Category',
+  },
+  {
+    number: 4,
+    label: 'Publish',
+  },
+];
+
 function RouteComponent() {
-  return <JewerlyForm />;
+  const [currentStep, setCurrentStep] = useState(1);
+
+  const handleStepClick = (stepNumber: number) => {
+    setCurrentStep(stepNumber);
+  };
+
+  const getFormStepper = () => {
+    switch (currentStep) {
+      case 1:
+        return <JewerlyForm onStepClick={handleStepClick} />;
+      case 2:
+        return <JewerlyUploadForm />;
+      case 4:
+        return <JewerlyPublishForm />;
+      default:
+        break;
+    }
+  };
+
+  return (
+    <section className='px-10'>
+      <Card className='w-full flex flex-col min-h-[600px]'>
+        <div className='w-full'>
+          <AnimatedStepper
+            steps={steps}
+            currentStep={currentStep}
+            onStepClick={handleStepClick}
+          />
+        </div>
+        {getFormStepper()}
+      </Card>
+    </section>
+  );
 }

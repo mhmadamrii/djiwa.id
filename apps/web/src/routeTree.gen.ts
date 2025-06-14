@@ -18,6 +18,8 @@ import { Route as IndexImport } from './routes/index'
 import { Route as MainLayoutMainImport } from './routes/_mainLayout/_main'
 import { Route as AuthLayoutAuthImport } from './routes/_authLayout/auth'
 import { Route as MainLayoutMainPublishingImport } from './routes/_mainLayout/_main.publishing'
+import { Route as MainLayoutMainMySalesImport } from './routes/_mainLayout/_main.my-sales'
+import { Route as MainLayoutMainMyModelsImport } from './routes/_mainLayout/_main.my-models'
 import { Route as MainLayoutMainDashboardImport } from './routes/_mainLayout/_main.dashboard'
 
 // Create/Update Routes
@@ -60,6 +62,18 @@ const AuthLayoutAuthRoute = AuthLayoutAuthImport.update({
 const MainLayoutMainPublishingRoute = MainLayoutMainPublishingImport.update({
   id: '/publishing',
   path: '/publishing',
+  getParentRoute: () => MainLayoutMainRoute,
+} as any)
+
+const MainLayoutMainMySalesRoute = MainLayoutMainMySalesImport.update({
+  id: '/my-sales',
+  path: '/my-sales',
+  getParentRoute: () => MainLayoutMainRoute,
+} as any)
+
+const MainLayoutMainMyModelsRoute = MainLayoutMainMyModelsImport.update({
+  id: '/my-models',
+  path: '/my-models',
   getParentRoute: () => MainLayoutMainRoute,
 } as any)
 
@@ -122,6 +136,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainLayoutMainDashboardImport
       parentRoute: typeof MainLayoutMainImport
     }
+    '/_mainLayout/_main/my-models': {
+      id: '/_mainLayout/_main/my-models'
+      path: '/my-models'
+      fullPath: '/my-models'
+      preLoaderRoute: typeof MainLayoutMainMyModelsImport
+      parentRoute: typeof MainLayoutMainImport
+    }
+    '/_mainLayout/_main/my-sales': {
+      id: '/_mainLayout/_main/my-sales'
+      path: '/my-sales'
+      fullPath: '/my-sales'
+      preLoaderRoute: typeof MainLayoutMainMySalesImport
+      parentRoute: typeof MainLayoutMainImport
+    }
     '/_mainLayout/_main/publishing': {
       id: '/_mainLayout/_main/publishing'
       path: '/publishing'
@@ -136,11 +164,15 @@ declare module '@tanstack/react-router' {
 
 interface MainLayoutMainRouteChildren {
   MainLayoutMainDashboardRoute: typeof MainLayoutMainDashboardRoute
+  MainLayoutMainMyModelsRoute: typeof MainLayoutMainMyModelsRoute
+  MainLayoutMainMySalesRoute: typeof MainLayoutMainMySalesRoute
   MainLayoutMainPublishingRoute: typeof MainLayoutMainPublishingRoute
 }
 
 const MainLayoutMainRouteChildren: MainLayoutMainRouteChildren = {
   MainLayoutMainDashboardRoute: MainLayoutMainDashboardRoute,
+  MainLayoutMainMyModelsRoute: MainLayoutMainMyModelsRoute,
+  MainLayoutMainMySalesRoute: MainLayoutMainMySalesRoute,
   MainLayoutMainPublishingRoute: MainLayoutMainPublishingRoute,
 }
 
@@ -156,6 +188,8 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthLayoutAuthRoute
   '': typeof MainLayoutMainRouteWithChildren
   '/dashboard': typeof MainLayoutMainDashboardRoute
+  '/my-models': typeof MainLayoutMainMyModelsRoute
+  '/my-sales': typeof MainLayoutMainMySalesRoute
   '/publishing': typeof MainLayoutMainPublishingRoute
 }
 
@@ -167,6 +201,8 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthLayoutAuthRoute
   '': typeof MainLayoutMainRouteWithChildren
   '/dashboard': typeof MainLayoutMainDashboardRoute
+  '/my-models': typeof MainLayoutMainMyModelsRoute
+  '/my-sales': typeof MainLayoutMainMySalesRoute
   '/publishing': typeof MainLayoutMainPublishingRoute
 }
 
@@ -179,6 +215,8 @@ export interface FileRoutesById {
   '/_authLayout/auth': typeof AuthLayoutAuthRoute
   '/_mainLayout/_main': typeof MainLayoutMainRouteWithChildren
   '/_mainLayout/_main/dashboard': typeof MainLayoutMainDashboardRoute
+  '/_mainLayout/_main/my-models': typeof MainLayoutMainMyModelsRoute
+  '/_mainLayout/_main/my-sales': typeof MainLayoutMainMySalesRoute
   '/_mainLayout/_main/publishing': typeof MainLayoutMainPublishingRoute
 }
 
@@ -192,6 +230,8 @@ export interface FileRouteTypes {
     | '/auth'
     | ''
     | '/dashboard'
+    | '/my-models'
+    | '/my-sales'
     | '/publishing'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -202,6 +242,8 @@ export interface FileRouteTypes {
     | '/auth'
     | ''
     | '/dashboard'
+    | '/my-models'
+    | '/my-sales'
     | '/publishing'
   id:
     | '__root__'
@@ -212,6 +254,8 @@ export interface FileRouteTypes {
     | '/_authLayout/auth'
     | '/_mainLayout/_main'
     | '/_mainLayout/_main/dashboard'
+    | '/_mainLayout/_main/my-models'
+    | '/_mainLayout/_main/my-sales'
     | '/_mainLayout/_main/publishing'
   fileRoutesById: FileRoutesById
 }
@@ -271,11 +315,21 @@ export const routeTree = rootRoute
       "filePath": "_mainLayout/_main.tsx",
       "children": [
         "/_mainLayout/_main/dashboard",
+        "/_mainLayout/_main/my-models",
+        "/_mainLayout/_main/my-sales",
         "/_mainLayout/_main/publishing"
       ]
     },
     "/_mainLayout/_main/dashboard": {
       "filePath": "_mainLayout/_main.dashboard.tsx",
+      "parent": "/_mainLayout/_main"
+    },
+    "/_mainLayout/_main/my-models": {
+      "filePath": "_mainLayout/_main.my-models.tsx",
+      "parent": "/_mainLayout/_main"
+    },
+    "/_mainLayout/_main/my-sales": {
+      "filePath": "_mainLayout/_main.my-sales.tsx",
       "parent": "/_mainLayout/_main"
     },
     "/_mainLayout/_main/publishing": {

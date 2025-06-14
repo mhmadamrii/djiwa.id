@@ -26,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useFormStorage } from '@/lib/store';
+import { useEffect } from 'react';
 
 const formSchema = z.object({
   title: z.string().min(1),
@@ -36,8 +38,14 @@ const formSchema = z.object({
   image_url: z.string().optional(),
 });
 
-export function JewerlyForm() {
+interface IProps {
+  onStepClick: (stepNumber: number) => void;
+}
+
+export function JewerlyForm({ onStepClick }: IProps) {
   const orpc = useORPC();
+  const { addJewerlyForm, jewerlyForm } = useFormStorage();
+  console.log('jewerlyForm', jewerlyForm);
 
   const { mutateAsync, isPending } = useMutation(
     orpc.jewerly.createJewerlyAsset.mutationOptions(),
@@ -56,32 +64,41 @@ export function JewerlyForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      mutateAsync({
-        title: values.title,
-        price: values.price,
-        currency: values.currency,
-        category_id: values.category,
-        description: values.desc,
-        image_url: values.image_url,
-      }).then((res) => {
-        console.log('response', res);
-        if (res.status === 'success') {
-          toast.success('Successfully created asset');
-          form.reset();
-        }
-      });
+      addJewerlyForm(values);
+      onStepClick(2);
+      toast.success('Data saved successfully');
     } catch (error) {
       console.error('Form submission error', error);
       toast.error('Failed to submit the form. Please try again.');
     }
   }
-  console.log(form.formState.errors);
+
+  useEffect(() => {
+    if (jewerlyForm.title) {
+      form.setValue('title', jewerlyForm.title);
+    }
+    if (jewerlyForm.price) {
+      form.setValue('price', jewerlyForm.price);
+    }
+    if (jewerlyForm.currency) {
+      form.setValue('currency', jewerlyForm.currency);
+    }
+    if (jewerlyForm.category) {
+      form.setValue('category', jewerlyForm.category);
+    }
+    if (jewerlyForm.desc) {
+      form.setValue('desc', jewerlyForm.desc);
+    }
+    if (jewerlyForm.image_url) {
+      form.setValue('image_url', jewerlyForm.image_url);
+    }
+  }, []);
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='space-y-8 container mx-auto py-10'
+        className='space-y-8 px-10 py-10'
       >
         <FormField
           control={form.control}
@@ -193,8 +210,12 @@ export function JewerlyForm() {
             </FormItem>
           )}
         />
-        <Button className='w-full' type='submit'>
-          {isPending ? 'Submitting...' : 'Submit'}
+        <Button
+          // onClick={() => onStepClick(2)}
+          className='w-full bg-[#FF3B30] cursor-pointer hover:bg-[#FF3B30]/80 rounded-4xl'
+          type='submit'
+        >
+          Next Step
         </Button>
       </form>
     </Form>
