@@ -1,4 +1,5 @@
 import Header from '@/components/header';
+import { Navbar } from '@/components/navbar';
 
 import { Sidebar } from '@/components/sidebar';
 import { authClient } from '@/lib/auth-client';
@@ -30,6 +31,7 @@ function RouteComponent() {
       <Sidebar location={location.pathname} />
       <section className={cn('border flex-grow')}>
         <Header location={location.pathname} />
+        <Navbar />
         <Outlet />
       </section>
     </main>

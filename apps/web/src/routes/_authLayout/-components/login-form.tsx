@@ -9,6 +9,7 @@ import { authClient } from '@/lib/auth-client';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/ui/password-input';
+
 import {
   Form,
   FormControl,
@@ -65,7 +66,7 @@ export function LoginForm() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className='space-y-8 max-w-3xl mx-auto py-10'
+          className='space-y-8 w-[400px] mx-auto py-10'
         >
           <FormField
             control={form.control}

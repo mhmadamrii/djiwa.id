@@ -16,7 +16,7 @@ function RouteComponent() {
       <Card>
         {isLoginForm ? <LoginForm /> : <RegisterForm />}
         <Button onClick={() => setIsLoginForm((prev) => !prev)}>
-          {isLoginForm ? 'Login' : 'Register'}
+          {isLoginForm ? 'Register' : 'Login'}
         </Button>
       </Card>
     </section>

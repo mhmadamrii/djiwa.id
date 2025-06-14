@@ -1,9 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { JewerlyForm } from '@/components/forms/jewerly-form';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_mainLayout/_main/publishing')({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/_mainLayout/_main/publishing"!</div>
+  return <JewerlyForm />;
 }
