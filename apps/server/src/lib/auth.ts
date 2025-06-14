@@ -6,6 +6,11 @@ import { oneTapClient } from 'better-auth/client/plugins';
 import { createAuthClient } from 'better-auth/client';
 
 export const auth = betterAuth({
+  user: {
+    additionalFields: {
+      role: true as any,
+    },
+  },
   database: prismaAdapter(prisma, {
     provider: 'postgresql',
   }),

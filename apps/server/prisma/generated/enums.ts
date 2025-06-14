@@ -18,3 +18,11 @@ export const NotifType = {
 } as const
 
 export type NotifType = (typeof NotifType)[keyof typeof NotifType]
+
+
+export const Role = {
+  USER: 'USER',
+  ARTIST: 'ARTIST'
+} as const
+
+export type Role = (typeof Role)[keyof typeof Role]

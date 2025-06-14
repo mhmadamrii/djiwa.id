@@ -1,5 +1,3 @@
-'use client';
-
 import '@google/model-viewer';
 import { Card, CardContent } from '../ui/card';
 

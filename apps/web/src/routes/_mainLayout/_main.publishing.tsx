@@ -41,7 +41,7 @@ function RouteComponent() {
       case 1:
         return <JewerlyForm onStepClick={handleStepClick} />;
       case 2:
-        return <JewerlyUploadForm />;
+        return <JewerlyUploadForm onStepClick={handleStepClick} />;
       case 4:
         return <JewerlyPublishForm />;
       default:
@@ -50,7 +50,8 @@ function RouteComponent() {
   };
 
   return (
-    <section className='px-10'>
+    <section className='px-10 flex flex-col gap-5'>
+      <h1 className='text-xl font-semibold'>Publishing</h1>
       <Card className='w-full flex flex-col min-h-[600px]'>
         <div className='w-full'>
           <AnimatedStepper

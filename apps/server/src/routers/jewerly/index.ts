@@ -10,6 +10,12 @@ export const jewerlyRouter = {
       input,
     };
   }),
+  getAllJewerlyCategories: protectedProcedure.handler(async ({ context }) => {
+    const categories = await prisma.category.findMany();
+    return {
+      data: categories,
+    };
+  }),
   getAllJewerlyAssets: protectedProcedure.handler(async ({ context }) => {
     const jewerlies = await prisma.jewerlyAsset.findMany();
     return {

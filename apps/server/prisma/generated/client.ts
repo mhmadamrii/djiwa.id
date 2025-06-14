@@ -89,3 +89,6 @@ export type Wishlist = Prisma.WishlistModel
 
 export type NotifType = $Enums.NotifType
 export const NotifType = $Enums.NotifType
+
+export type Role = $Enums.Role
+export const Role = $Enums.Role

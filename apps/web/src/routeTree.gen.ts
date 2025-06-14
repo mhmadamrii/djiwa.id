@@ -15,6 +15,7 @@ import { Route as TestingImport } from './routes/testing'
 import { Route as LoginImport } from './routes/login'
 import { Route as DashboardUserImport } from './routes/dashboard-user'
 import { Route as IndexImport } from './routes/index'
+import { Route as MainLayoutCategoryImport } from './routes/_mainLayout/category'
 import { Route as MainLayoutMainImport } from './routes/_mainLayout/_main'
 import { Route as AuthLayoutAuthImport } from './routes/_authLayout/auth'
 import { Route as MainLayoutMainPublishingImport } from './routes/_mainLayout/_main.publishing'
@@ -45,6 +46,12 @@ const DashboardUserRoute = DashboardUserImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MainLayoutCategoryRoute = MainLayoutCategoryImport.update({
+  id: '/_mainLayout/category',
+  path: '/category',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -129,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MainLayoutMainImport
       parentRoute: typeof rootRoute
     }
+    '/_mainLayout/category': {
+      id: '/_mainLayout/category'
+      path: '/category'
+      fullPath: '/category'
+      preLoaderRoute: typeof MainLayoutCategoryImport
+      parentRoute: typeof rootRoute
+    }
     '/_mainLayout/_main/dashboard': {
       id: '/_mainLayout/_main/dashboard'
       path: '/dashboard'
@@ -187,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/testing': typeof TestingRoute
   '/auth': typeof AuthLayoutAuthRoute
   '': typeof MainLayoutMainRouteWithChildren
+  '/category': typeof MainLayoutCategoryRoute
   '/dashboard': typeof MainLayoutMainDashboardRoute
   '/my-models': typeof MainLayoutMainMyModelsRoute
   '/my-sales': typeof MainLayoutMainMySalesRoute
@@ -200,6 +215,7 @@ export interface FileRoutesByTo {
   '/testing': typeof TestingRoute
   '/auth': typeof AuthLayoutAuthRoute
   '': typeof MainLayoutMainRouteWithChildren
+  '/category': typeof MainLayoutCategoryRoute
   '/dashboard': typeof MainLayoutMainDashboardRoute
   '/my-models': typeof MainLayoutMainMyModelsRoute
   '/my-sales': typeof MainLayoutMainMySalesRoute
@@ -214,6 +230,7 @@ export interface FileRoutesById {
   '/testing': typeof TestingRoute
   '/_authLayout/auth': typeof AuthLayoutAuthRoute
   '/_mainLayout/_main': typeof MainLayoutMainRouteWithChildren
+  '/_mainLayout/category': typeof MainLayoutCategoryRoute
   '/_mainLayout/_main/dashboard': typeof MainLayoutMainDashboardRoute
   '/_mainLayout/_main/my-models': typeof MainLayoutMainMyModelsRoute
   '/_mainLayout/_main/my-sales': typeof MainLayoutMainMySalesRoute
@@ -229,6 +246,7 @@ export interface FileRouteTypes {
     | '/testing'
     | '/auth'
     | ''
+    | '/category'
     | '/dashboard'
     | '/my-models'
     | '/my-sales'
@@ -241,6 +259,7 @@ export interface FileRouteTypes {
     | '/testing'
     | '/auth'
     | ''
+    | '/category'
     | '/dashboard'
     | '/my-models'
     | '/my-sales'
@@ -253,6 +272,7 @@ export interface FileRouteTypes {
     | '/testing'
     | '/_authLayout/auth'
     | '/_mainLayout/_main'
+    | '/_mainLayout/category'
     | '/_mainLayout/_main/dashboard'
     | '/_mainLayout/_main/my-models'
     | '/_mainLayout/_main/my-sales'
@@ -267,6 +287,7 @@ export interface RootRouteChildren {
   TestingRoute: typeof TestingRoute
   AuthLayoutAuthRoute: typeof AuthLayoutAuthRoute
   MainLayoutMainRoute: typeof MainLayoutMainRouteWithChildren
+  MainLayoutCategoryRoute: typeof MainLayoutCategoryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -276,6 +297,7 @@ const rootRouteChildren: RootRouteChildren = {
   TestingRoute: TestingRoute,
   AuthLayoutAuthRoute: AuthLayoutAuthRoute,
   MainLayoutMainRoute: MainLayoutMainRouteWithChildren,
+  MainLayoutCategoryRoute: MainLayoutCategoryRoute,
 }
 
 export const routeTree = rootRoute
@@ -293,7 +315,8 @@ export const routeTree = rootRoute
         "/login",
         "/testing",
         "/_authLayout/auth",
-        "/_mainLayout/_main"
+        "/_mainLayout/_main",
+        "/_mainLayout/category"
       ]
     },
     "/": {
@@ -319,6 +342,9 @@ export const routeTree = rootRoute
         "/_mainLayout/_main/my-sales",
         "/_mainLayout/_main/publishing"
       ]
+    },
+    "/_mainLayout/category": {
+      "filePath": "_mainLayout/category.tsx"
     },
     "/_mainLayout/_main/dashboard": {
       "filePath": "_mainLayout/_main.dashboard.tsx",

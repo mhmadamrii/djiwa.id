@@ -1,11 +1,8 @@
-import Header from '../components/header';
 import appCss from '../index.css?url';
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { Sidebar } from '@/components/sidebar';
-import { cn } from '@/lib/utils';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 import type { QueryClient } from '@tanstack/react-query';
@@ -16,7 +13,6 @@ import {
   Outlet,
   Scripts,
   createRootRouteWithContext,
-  useLocation,
   useRouterState,
 } from '@tanstack/react-router';
 
@@ -52,7 +48,6 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 
 function RootDocument() {
   const isFetching = useRouterState({ select: (s) => s.isLoading });
-  const location = useLocation();
 
   return (
     <html lang='en' className='dark'>

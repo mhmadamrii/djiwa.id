@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-
 import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
@@ -88,9 +87,9 @@ const AnimatedStepper: React.FC<StepperProps> = ({
                   className={cn(
                     'w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold cursor-pointer',
                     step.number === currentStep
-                      ? 'bg-primary text-primary-foreground'
+                      ? 'bg-[#FF3B30] text-primary-foreground'
                       : step.number < currentStep
-                        ? 'bg-primary text-primary-foreground'
+                        ? 'bg-[#FF3B30] text-primary-foreground'
                         : 'bg-secondary text-secondary-foreground',
                   )}
                   initial={{ scale: 1 }}
@@ -136,7 +135,7 @@ const AnimatedStepper: React.FC<StepperProps> = ({
                   animate={{
                     backgroundColor:
                       step.number <= currentStep
-                        ? 'black'
+                        ? '#FF3B30'
                         : 'hsl(var(--muted))',
                     transition: { duration: 0.3 },
                   }}

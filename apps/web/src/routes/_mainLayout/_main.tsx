@@ -1,15 +1,8 @@
-import Header from '@/components/header';
-import { Navbar } from '@/components/navbar';
-
+import { Header } from '@/components/header';
 import { Sidebar } from '@/components/sidebar';
 import { authClient } from '@/lib/auth-client';
 import { cn } from '@/lib/utils';
-import {
-  createFileRoute,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from '@tanstack/react-router';
+import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_mainLayout/_main')({
   component: RouteComponent,
@@ -17,9 +10,7 @@ export const Route = createFileRoute('/_mainLayout/_main')({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { data: session, isPending } = authClient.useSession();
-  console.log('session', session);
 
   if (!session && !isPending) {
     navigate({
@@ -28,10 +19,9 @@ function RouteComponent() {
   }
   return (
     <main className='flex min-h-screen'>
-      <Sidebar location={location.pathname} />
-      <section className={cn('border flex-grow')}>
-        <Header location={location.pathname} />
-        <Navbar />
+      <Sidebar />
+      <section className={cn('flex flex-col gap-7 flex-grow')}>
+        <Header />
         <Outlet />
       </section>
     </main>

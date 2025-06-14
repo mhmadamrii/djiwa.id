@@ -1,3 +1,3 @@
 export function JewerlyPublishForm() {
-  return <div>Hello JewerlyPublishForm!</div>;
+  return <section></section>;
 }

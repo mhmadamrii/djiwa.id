@@ -1,6 +1,6 @@
 export const NAV_LINKS = [
   {
-    to: '/',
+    to: '/dashboard',
     label: 'Dashboard',
     logo: '/dashboard.svg',
   },

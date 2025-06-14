@@ -1,10 +1,12 @@
 import * as z from 'zod';
 
+import { useFormStorage } from '@/lib/store';
+import { useEffect } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { useORPC } from '@/utils/orpc';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
@@ -26,8 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useFormStorage } from '@/lib/store';
-import { useEffect } from 'react';
 
 const formSchema = z.object({
   title: z.string().min(1),
@@ -45,7 +45,9 @@ interface IProps {
 export function JewerlyForm({ onStepClick }: IProps) {
   const orpc = useORPC();
   const { addJewerlyForm, jewerlyForm } = useFormStorage();
-  console.log('jewerlyForm', jewerlyForm);
+  const { data: categories } = useQuery(
+    orpc.jewerly.getAllJewerlyCategories.queryOptions(),
+  );
 
   const { mutateAsync, isPending } = useMutation(
     orpc.jewerly.createJewerlyAsset.mutationOptions(),
@@ -74,25 +76,30 @@ export function JewerlyForm({ onStepClick }: IProps) {
   }
 
   useEffect(() => {
-    if (jewerlyForm.title) {
-      form.setValue('title', jewerlyForm.title);
-    }
-    if (jewerlyForm.price) {
-      form.setValue('price', jewerlyForm.price);
-    }
-    if (jewerlyForm.currency) {
-      form.setValue('currency', jewerlyForm.currency);
-    }
-    if (jewerlyForm.category) {
+    if (!jewerlyForm) return;
+
+    const fields = [
+      'title',
+      'price',
+      'currency',
+      'category',
+      'desc',
+      'image_url',
+    ] as const;
+
+    fields.forEach((field) => {
+      if (jewerlyForm[field]) {
+        form.setValue(field, jewerlyForm[field]);
+      }
+    });
+
+    const timeout = setTimeout(() => {
       form.setValue('category', jewerlyForm.category);
-    }
-    if (jewerlyForm.desc) {
-      form.setValue('desc', jewerlyForm.desc);
-    }
-    if (jewerlyForm.image_url) {
-      form.setValue('image_url', jewerlyForm.image_url);
-    }
-  }, []);
+      form.setValue('currency', jewerlyForm.currency);
+    }, 300);
+
+    return () => clearTimeout(timeout); // 👈 clear timeout on unmount
+  }, [jewerlyForm, form]);
 
   return (
     <Form {...form}>
@@ -105,11 +112,11 @@ export function JewerlyForm({ onStepClick }: IProps) {
           name='title'
           render={({ field }) => (
             <FormItem className='w-full'>
-              <FormLabel>Asset Title</FormLabel>
+              <FormLabel>Asset Name</FormLabel>
               <FormControl>
                 <Input placeholder='Ring' type='' {...field} />
               </FormControl>
-              <FormDescription>Jewerly name</FormDescription>
+              <FormDescription>Your asset name</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -117,31 +124,55 @@ export function JewerlyForm({ onStepClick }: IProps) {
 
         <FormField
           control={form.control}
-          name='price'
+          name='category'
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Price</FormLabel>
-              <FormControl>
-                <Input placeholder='3000' type='number' {...field} />
-              </FormControl>
-              <FormDescription>Your Jewerly Price</FormDescription>
+            <FormItem className='w-full'>
+              <FormLabel>Category</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger className='w-full'>
+                    <SelectValue placeholder={'Select category to display'} />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories?.data?.map((item) => (
+                    <SelectItem key={item.id} value={item.id.toString()}>
+                      {item.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormDescription>Select Your Asset Category</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <div className='flex w-full gap-4'>
-          <div className='w-full'>
+        <div className='flex w-full flex-col sm:flex-row gap-4'>
+          <div className='w-full sm:w-1/2'>
+            <FormField
+              control={form.control}
+              name='price'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input placeholder='3000' type='number' {...field} />
+                  </FormControl>
+                  <FormDescription>Your Asset Price</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className='w-full sm:w-1/2'>
             <FormField
               control={form.control}
               name='currency'
               render={({ field }) => (
                 <FormItem className='w-full'>
                   <FormLabel>Currency</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className='w-full'>
                         <SelectValue placeholder='USD' />
@@ -149,40 +180,10 @@ export function JewerlyForm({ onStepClick }: IProps) {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value='usd'>USD</SelectItem>
+                      <SelectItem value='idr'>IDR</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormDescription>Your currency asset</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className='w-full'>
-            <FormField
-              control={form.control}
-              name='category'
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className='w-full'>
-                        <SelectValue placeholder='Select a verified email to display' />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value='2ec82c06-3e94-45b6-8cb0-4d54d4d9cd51'>
-                        2ec82c06-3e94-45b6-8cb0-4d54d4d9cd51
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    You can manage email addresses in your email settings.
-                  </FormDescription>
+                  <FormDescription>Your Currency Asset</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -204,19 +205,21 @@ export function JewerlyForm({ onStepClick }: IProps) {
                 />
               </FormControl>
               <FormDescription>
-                You can @mention other users and organizations.
+                Please Provide A Detailed Description of Your Asset.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button
-          // onClick={() => onStepClick(2)}
-          className='w-full bg-[#FF3B30] cursor-pointer hover:bg-[#FF3B30]/80 rounded-4xl'
-          type='submit'
-        >
-          Next Step
-        </Button>
+
+        <div className='w-full flex items-center justify-end'>
+          <Button
+            className='w-full sm:w-1/4 bg-[#FF3B30] cursor-pointer hover:bg-[#FF3B30]/80'
+            type='submit'
+          >
+            Next Step
+          </Button>
+        </div>
       </form>
     </Form>
   );

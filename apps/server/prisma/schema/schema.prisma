@@ -15,6 +15,7 @@ model User {
   email          String
   emailVerified  Boolean
   image          String?
+  role           Role           @default(USER)
   createdAt      DateTime
   updatedAt      DateTime
   sessions       Session[]
@@ -156,4 +157,9 @@ enum NotifType {
   JEWERLY_LIKE
   JEWERLY_DISLIKE
   JEWERLY_DELETE
+}
+
+enum Role {
+  USER
+  ARTIST
 }
