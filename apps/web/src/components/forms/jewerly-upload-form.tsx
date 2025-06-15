@@ -1,7 +1,9 @@
 import * as React from 'react';
 
 import { Button } from '@/components/ui/button';
-import { Upload, X } from 'lucide-react';
+import { authClient } from '@/lib/auth-client';
+import { useFormStorage } from '@/lib/store';
+import { LoaderIcon, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { IKContext, IKUpload } from 'imagekitio-react';
 import { useMutation } from '@tanstack/react-query';
@@ -24,13 +26,38 @@ interface IProps {
 
 export function JewerlyUploadForm({ onStepClick }: IProps) {
   const orpc = useORPC();
+
+  const [files, setFiles] = React.useState<File[]>([]);
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  const { data: session } = authClient.useSession();
+  const { addJewerlyForm, jewerlyForm } = useFormStorage();
+
   const { mutateAsync } = useMutation(
     orpc.imageKit.authenticator.mutationOptions(),
   );
-  const [files, setFiles] = React.useState<File[]>([]);
 
   const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
   const urlEndpoint = 'https://ik.imagekit.io/mhmadamrii';
+
+  const handleStartUpload = () => {
+    setIsUploading(true);
+  };
+
+  const handleSuccessUpload = (res: any) => {
+    if (res.url) {
+      toast.success('Image uploaded successfully');
+      setIsUploading(false);
+      addJewerlyForm({
+        ...jewerlyForm,
+        image_url: res.url,
+      });
+    }
+  };
+
+  const handleErrorUpload = (err: any) => {
+    console.log('err', err);
+  };
 
   const onFileValidate = React.useCallback(
     (file: File): string | null => {
@@ -87,13 +114,14 @@ export function JewerlyUploadForm({ onStepClick }: IProps) {
                 Or click to browse (max 2 files)
               </p>
               <IKUpload
-                fileName='test-upload.png'
-                onError={(err: any) => console.log('error', err)}
-                onSuccess={(res: any) => console.log('success', res)}
+                fileName={`${session?.user.name}-${new Date().getTime()}.png`}
+                onError={handleErrorUpload}
+                onSuccess={handleSuccessUpload}
+                onUploadStart={handleStartUpload}
                 onUploadProgress={(progress: any) =>
                   console.log('progress', progress)
                 }
-                className='border border-red-500 absolute top-0 left-0 right-0 bottom-0 z-10 flex items-center justify-center'
+                className='absolute top-0 left-0 right-0 bottom-0 z-10 flex items-center justify-center'
               />
             </div>
             <FileUploadTrigger asChild>
@@ -118,15 +146,16 @@ export function JewerlyUploadForm({ onStepClick }: IProps) {
         </FileUpload>
       </IKContext>
       <Button
-        disabled={files.length < 1}
+        disabled={files.length < 1 || isUploading}
         onClick={() => {
-          // onStepClick(3);
-          console.log('files', files);
+          if (jewerlyForm.image_url) {
+            onStepClick(3);
+          }
         }}
         className='w-full sm:w-1/4 bg-[#FF3B30] cursor-pointer hover:bg-[#FF3B30]/80'
         type='submit'
       >
-        Next Step
+        {isUploading ? <LoaderIcon className='animate-spin' /> : 'Next Step'}
       </Button>
     </section>
   );

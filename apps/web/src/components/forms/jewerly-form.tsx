@@ -96,7 +96,7 @@ export function JewerlyForm({ onStepClick }: IProps) {
     const timeout = setTimeout(() => {
       form.setValue('category', jewerlyForm.category);
       form.setValue('currency', jewerlyForm.currency);
-    }, 300);
+    }, 500);
 
     return () => clearTimeout(timeout); // 👈 clear timeout on unmount
   }, [jewerlyForm, form]);
