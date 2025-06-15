@@ -5,6 +5,7 @@ import { AnimatedStepper } from '@/components/ui/stepper';
 import { Card } from '@/components/ui/card';
 import { JewerlyUploadForm } from '@/components/forms/jewerly-upload-form';
 import { JewerlyPublishForm } from '@/components/forms/jewerly-publish-form';
+import { JewerlyLinkForm } from '@/components/forms/jewerly-link-form';
 
 export const Route = createFileRoute('/_mainLayout/_main/publishing')({
   component: RouteComponent,
@@ -21,7 +22,7 @@ const steps = [
   },
   {
     number: 3,
-    label: 'Additional',
+    label: 'Links',
   },
   {
     number: 4,
@@ -42,6 +43,8 @@ function RouteComponent() {
         return <JewerlyForm onStepClick={handleStepClick} />;
       case 2:
         return <JewerlyUploadForm onStepClick={handleStepClick} />;
+      case 3:
+        return <JewerlyLinkForm onStepClick={handleStepClick} />;
       case 4:
         return <JewerlyPublishForm />;
       default:

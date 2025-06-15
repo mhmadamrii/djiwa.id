@@ -15,11 +15,9 @@ export const auth = betterAuth({
     provider: 'postgresql',
   }),
   trustedOrigins: [process.env.CORS_ORIGIN || ''],
-  plugins: [
-    oneTap(), // Add the One Tap server plugin
-  ],
   emailAndPassword: {
     enabled: true,
+    autoSignIn: true,
   },
 });
 

@@ -4,9 +4,10 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import { IKContext } from 'imagekitio-react';
 
-import type { QueryClient } from '@tanstack/react-query';
-import type { orpc } from '@/utils/orpc';
+import { useMutation, type QueryClient } from '@tanstack/react-query';
+import { useORPC, type orpc } from '@/utils/orpc';
 
 import {
   HeadContent,
@@ -47,7 +48,15 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootDocument() {
+  const orpc = useORPC();
   const isFetching = useRouterState({ select: (s) => s.isLoading });
+
+  const { mutateAsync } = useMutation(
+    orpc.imageKit.authenticator.mutationOptions(),
+  );
+
+  const publicKey = import.meta.env.VITE_IMAGE_KIT_PUBLIC_KEY;
+  const urlEndpoint = 'https://ik.imagekit.io/mhmadamrii';
 
   return (
     <html lang='en' className='dark'>
@@ -56,7 +65,15 @@ function RootDocument() {
       </head>
       <body>
         <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
-          <Outlet />
+          <IKContext
+            publicKey={publicKey}
+            urlEndpoint={urlEndpoint}
+            authenticator={async (r: any) => {
+              return await mutateAsync(r);
+            }}
+          >
+            <Outlet />
+          </IKContext>
         </ThemeProvider>
         <Toaster richColors />
         <TanStackRouterDevtools position='bottom-left' />

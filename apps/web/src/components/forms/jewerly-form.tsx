@@ -49,10 +49,6 @@ export function JewerlyForm({ onStepClick }: IProps) {
     orpc.jewerly.getAllJewerlyCategories.queryOptions(),
   );
 
-  const { mutateAsync, isPending } = useMutation(
-    orpc.jewerly.createJewerlyAsset.mutationOptions(),
-  );
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -96,7 +92,7 @@ export function JewerlyForm({ onStepClick }: IProps) {
     const timeout = setTimeout(() => {
       form.setValue('category', jewerlyForm.category);
       form.setValue('currency', jewerlyForm.currency);
-    }, 500);
+    }, 900);
 
     return () => clearTimeout(timeout); // 👈 clear timeout on unmount
   }, [jewerlyForm, form]);

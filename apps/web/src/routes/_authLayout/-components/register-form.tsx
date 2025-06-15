@@ -11,6 +11,7 @@ import { authClient } from '@/lib/auth-client';
 import { useNavigate } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/ui/password-input';
+
 import {
   Form,
   FormControl,
@@ -23,6 +24,7 @@ import {
 const formSchema = z.object({
   email: z.string(),
   password: z.string(),
+  name: z.string(),
 });
 
 export function RegisterForm() {
@@ -33,6 +35,7 @@ export function RegisterForm() {
     defaultValues: {
       email: '',
       password: '',
+      name: '',
     },
   });
 
@@ -43,15 +46,11 @@ export function RegisterForm() {
         {
           email: values.email,
           password: values.password,
-          name: 'something',
+          name: values.name,
         },
         {
           onSuccess: (res) => {
             console.log('res', res);
-            // navigate({
-            //   to: '/dashboard',
-            // });
-            // toast.success('Sign up successful');
           },
           onError: (error) => {
             console.log('error', error);
@@ -75,6 +74,21 @@ export function RegisterForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           className='space-y-8 w-[400px] mx-auto py-10'
         >
+          <FormField
+            control={form.control}
+            name='name'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder='John Doe' type='text' {...field} />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name='email'

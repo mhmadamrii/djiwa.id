@@ -13,6 +13,16 @@ type Form = {
 type FormState = {
   jewerlyForm: Form;
   addJewerlyForm: (form: Form) => void;
+  resetJewerlyForm: () => void;
+};
+
+const defaultForm: Form = {
+  title: '',
+  price: 0,
+  currency: '',
+  category: '',
+  desc: '',
+  image_url: '',
 };
 
 export const useFormStorage = create<FormState>()(
@@ -27,6 +37,7 @@ export const useFormStorage = create<FormState>()(
         image_url: '',
       },
       addJewerlyForm: (form) => set(() => ({ jewerlyForm: form })),
+      resetJewerlyForm: () => set(() => ({ jewerlyForm: defaultForm })),
     }),
     {
       name: 'form-djiwa-storage',

@@ -1,6 +1,7 @@
-import { protectedProcedure } from '@/lib/orpc';
 import prisma from 'prisma';
 import z from 'zod';
+
+import { protectedProcedure } from '@/lib/orpc';
 
 export const jewerlyRouter = {
   jewerlyAsset: protectedProcedure.handler(({ input, context }) => {
@@ -53,10 +54,13 @@ export const jewerlyRouter = {
     )
     .handler(async ({ input, context }) => {
       const jewerly = await prisma.jewerlyAsset.create({
-        data: input,
+        data: {
+          ...input,
+          userId: context.session?.user.id,
+        },
       });
       return {
-        status: 'success',
+        success: true,
         jewerly,
       };
     }),
