@@ -1,5 +1,6 @@
 import { protectedProcedure, publicProcedure } from '../lib/orpc';
 import { sendVerificationEmail } from './email';
+import { imageKitRouter } from './image-kit';
 import { jewerlyRouter } from './jewerly';
 
 export const appRouter = {
@@ -14,5 +15,6 @@ export const appRouter = {
   }),
   jewerly: jewerlyRouter,
   email: sendVerificationEmail,
+  imageKit: imageKitRouter,
 };
 export type AppRouter = typeof appRouter;

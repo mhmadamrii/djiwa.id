@@ -21,7 +21,7 @@ const steps = [
   },
   {
     number: 3,
-    label: 'Category',
+    label: 'Additional',
   },
   {
     number: 4,
