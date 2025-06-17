@@ -14,12 +14,8 @@ app.use(
   '/*',
   cors({
     origin: (origin) => {
-      // You can whitelist multiple domains here
-      const allowedOrigins = [
-        'http://localhost:3001',
-        'https://your-production-frontend.com',
-      ];
-      return allowedOrigins.includes(origin ?? '') ? origin : '';
+      const allowed = ['http://localhost:3001', 'https://your-frontend.com'];
+      return allowed.includes(origin ?? '') ? origin : '';
     },
     allowMethods: ['GET', 'POST', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
@@ -27,11 +23,23 @@ app.use(
   }),
 );
 
-app.on(['POST', 'GET', 'OPTIONS'], '/api/auth/**', (c) => {
-  // Just respond OK for preflight
+app.on(['GET', 'POST', 'OPTIONS'], '/api/auth/**', async (c) => {
   if (c.req.method === 'OPTIONS') {
-    return c.newResponse(null, 204);
+    const res = c.newResponse(null, 204);
+    res.headers.set(
+      'Access-Control-Allow-Origin',
+      c.req.header('Origin') || '',
+    );
+    res.headers.set('Access-Control-Allow-Credentials', 'true');
+    res.headers.set(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization',
+    );
+    res.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.headers.set('Cache-Control', 'no-store');
+    return res;
   }
+
   return auth.handler(c.req.raw);
 });
 
