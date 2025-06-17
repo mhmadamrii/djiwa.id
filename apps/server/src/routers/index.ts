@@ -1,6 +1,5 @@
 import { protectedProcedure, publicProcedure } from '../lib/orpc';
 import { dashboardRouter } from './dashboard';
-import { sendVerificationEmail } from './email';
 import { imageKitRouter } from './image-kit';
 import { jewerlyRouter } from './jewerly';
 
@@ -15,7 +14,6 @@ export const appRouter = {
     };
   }),
   jewerly: jewerlyRouter,
-  email: sendVerificationEmail,
   imageKit: imageKitRouter,
   dashboard: dashboardRouter,
 };
