@@ -27,7 +27,13 @@ app.use(
   }),
 );
 
-app.on(['POST', 'GET'], '/api/auth/**', (c) => auth.handler(c.req.raw));
+app.on(['POST', 'GET', 'OPTIONS'], '/api/auth/**', (c) => {
+  // Just respond OK for preflight
+  if (c.req.method === 'OPTIONS') {
+    return c.newResponse(null, 204);
+  }
+  return auth.handler(c.req.raw);
+});
 
 const handler = new RPCHandler(appRouter);
 app.use('/rpc/*', async (c, next) => {
