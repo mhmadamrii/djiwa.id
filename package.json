@@ -17,7 +17,8 @@
     "db:studio": "turbo -F server db:studio",
     "db:generate": "turbo -F server db:generate",
     "db:migrate": "turbo -F server db:migrate",
-    "build:server": "turbo -F server build"
+    "build:server": "turbo -F server build",
+    "deploy:server": "turbo -F server deploy"
   },
   "devDependencies": {
     "prettier": "^3.5.3",
