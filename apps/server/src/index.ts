@@ -4,12 +4,13 @@ import { createContext } from './lib/context';
 import { appRouter } from './routers/index';
 import { auth } from './lib/auth';
 import { Hono } from 'hono';
-// import { cors } from 'hono/cors';
+import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
 const app = new Hono();
 
 app.use(logger());
+app.use('*', cors());
 // app.use(
 //   '/*',
 //   cors({
