@@ -4,24 +4,24 @@ import { createContext } from './lib/context';
 import { appRouter } from './routers/index';
 import { auth } from './lib/auth';
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
+// import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
 
 const app = new Hono();
 
 app.use(logger());
-app.use(
-  '/*',
-  cors({
-    origin: (origin) => {
-      const allowed = ['http://localhost:3001', 'https://your-frontend.com'];
-      return allowed.includes(origin ?? '') ? origin : '';
-    },
-    allowMethods: ['GET', 'POST', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }),
-);
+// app.use(
+//   '/*',
+//   cors({
+//     origin: (origin) => {
+//       const allowed = ['http://localhost:3001', 'https://your-frontend.com'];
+//       return allowed.includes(origin ?? '') ? origin : '';
+//     },
+//     allowMethods: ['GET', 'POST', 'OPTIONS'],
+//     allowHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true,
+//   }),
+// );
 
 app.on(['GET', 'POST', 'OPTIONS'], '/api/auth/**', async (c) => {
   if (c.req.method === 'OPTIONS') {
